@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 public class WhiskyRepositoryImpl implements WhiskyRepositoryCustom {
@@ -43,14 +44,29 @@ public class WhiskyRepositoryImpl implements WhiskyRepositoryCustom {
         Distillery distillery = distilleryRepository.getOne(id);
 
         Session session = entityManager.unwrap(Session.class);
-        Criteria cr1 = session.createCriteria(Distillery.class);
+        Criteria cr1 = session.createCriteria(Whisky.class);
 
-        cr1.createAlias("whiskies", "whisky");
-        Criterion item1 = Restrictions.eq("whisky.age", age);
-        Criterion item2 = Restrictions.eq("whisky.distillery", distillery);
+
+        Criterion item1 = Restrictions.eq("age", age);
+        Criterion item2 = Restrictions.eq("distillery", distillery);
         cr1.add(Restrictions.and(item1, item2));
 
         result = cr1.list();
+        return result;
+    }
+
+    @Transactional
+    public List<Whisky> getWhiskiesByRegion(String region){
+        List<Whisky> result = new ArrayList<>();
+
+        List<Distillery> distilleries = distilleryRepository.getDistilleriesByRegion(region);
+
+        for (Distillery distillery : distilleries){
+            for (Whisky whisky : distillery.getWhiskies()){
+                result.add(whisky);
+            }
+        }
+
         return result;
     }
 

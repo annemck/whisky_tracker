@@ -45,4 +45,10 @@ public class WhiskyTrackerApplicationTests {
 		List<Whisky> result = whiskyRepository.getWhiskiesByDistillaryIdAndAge(1L, 12);
 		assertEquals(1, result.size());
 	}
+
+	@Test
+	public void canGetWhiskiesByRegion() {
+		List<Whisky> result = whiskyRepository.getWhiskiesByRegion("Highland");
+		assertEquals(2, result.size());
+	}
 }
