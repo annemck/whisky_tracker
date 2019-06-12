@@ -19,15 +19,15 @@ public class DistilleryController {
     @Autowired
     DistilleryRepository distilleryRepository;
 
-    @Autowired
-    WhiskyRepository whiskyRepository;
-
     @GetMapping(value = "/region/{location}")
     public List<Distillery> getDistillariesByRegion(@PathVariable String location){
         return distilleryRepository.getDistilleriesByRegion(location);
     }
 
-
+    @GetMapping(value = "/12years")
+    public List<Distillery> getDistilleriesWithWhiskiesThatAreTwelveYearsOld(){
+        return distilleryRepository.getDistilleriesWithWhiskiesThatAreTwelveYearsOld();
+    }
 
 
 }
